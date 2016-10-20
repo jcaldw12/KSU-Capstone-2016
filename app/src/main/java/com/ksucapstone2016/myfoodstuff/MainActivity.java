@@ -3,8 +3,10 @@ package com.ksucapstone2016.myfoodstuff;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,10 +30,30 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.view.View;
 
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+import android.support.v4.view.GestureDetectorCompat;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> shoppingList = null;
     ArrayAdapter<String> adapter = null;
     ListView lv = null;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+//I
         //Added by Adam//
         shoppingList = getArrayVal(getApplicationContext());
         Collections.sort(shoppingList);
@@ -53,12 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.trim().equals(shoppingList.get(position).trim())) {
                     removeElement(selectedItem, position);
                 } else {
-                    Toast.makeText(getApplicationContext(),"Error Removing Element", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Error Removing Element", Toast.LENGTH_LONG).show();
                 }
             }
         });
         //End of addition//
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -79,11 +104,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.action_sort) {
-            Collections.sort(shoppingList);
-            lv.setAdapter(adapter);
-            return true;
-        }
+
         if (id == R.id.action_add) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Add Item");
@@ -130,16 +151,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static String preferredCase(String original)
-    {
+    public static String preferredCase(String original) {
         if (original.isEmpty())
             return original;
 
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 
-    public static void storeArrayVal( ArrayList<String> inArrayList, Context context)
-    {
+    public static void storeArrayVal(ArrayList<String> inArrayList, Context context) {
         Set<String> WhatToWrite = new HashSet<String>(inArrayList);
         SharedPreferences WordSearchPutPrefs = context.getSharedPreferences("dbArrayValues", Activity.MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = WordSearchPutPrefs.edit();
@@ -147,15 +166,14 @@ public class MainActivity extends AppCompatActivity {
         prefEditor.commit();
     }
 
-    public static ArrayList getArrayVal( Context dan)
-    {
-        SharedPreferences WordSearchGetPrefs = dan.getSharedPreferences("dbArrayValues",Activity.MODE_PRIVATE);
+    public static ArrayList getArrayVal(Context dan) {
+        SharedPreferences WordSearchGetPrefs = dan.getSharedPreferences("dbArrayValues", Activity.MODE_PRIVATE);
         Set<String> tempSet = new HashSet<String>();
         tempSet = WordSearchGetPrefs.getStringSet("myArray", tempSet);
         return new ArrayList<String>(tempSet);
     }
-
-    public void removeElement(String selectedItem, final int position){
+    //ToDO: swap no and yes,pleaes
+    public void removeElement(String selectedItem, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Remove " + selectedItem + "?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -175,6 +193,68 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
+//ToDO: Long hold for menu option
 
+    //ToDo: Internet data interface
+//ToDo: Side slides delete items
+    public boolean onTouchEvent(MotionEvent event) {
 
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch (action) {
+            case (MotionEvent.ACTION_DOWN):
+
+                return true;
+            case (MotionEvent.ACTION_MOVE):
+
+                return true;
+            case (MotionEvent.ACTION_UP):
+
+                return true;
+            case (MotionEvent.ACTION_CANCEL):
+
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE):
+
+                return true;
+            default:
+                return super.onTouchEvent(event);
+        }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
