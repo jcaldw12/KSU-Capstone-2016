@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyFood.iml" filepath="$PROJECT_DIR$/MyFood.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MyFoodstuff.iml" filepath="$PROJECT_DIR$/MyFoodstuff.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KSU-Capstone-2016.iml" filepath="$PROJECT_DIR$/KSU-Capstone-2016.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
