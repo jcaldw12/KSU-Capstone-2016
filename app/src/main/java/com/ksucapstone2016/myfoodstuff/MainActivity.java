@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
             // cheese 2.50
             // bread 2.75
 
+        // can comment out all the adds
+        // but DO NOT REMOVE THEM ~~~Aaron
         masterItems.add("Eggs");
         // get price for eggs from Walmart API
         WalmartPrices.add((float) 2.50);
