@@ -1,9 +1,10 @@
 package com.ksucapstone2016.myfoodstuff;
 
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.view.MotionEventCompat;
@@ -16,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Collections;
 
 import java.util.HashSet;
@@ -28,12 +29,12 @@ import android.content.DialogInterface;
 import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.view.View;
+/*import android.view.View;
 
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuItem;*/
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
+/*import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -43,12 +44,13 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
+*/
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> shoppingList = null;
     ArrayAdapter<String> adapter = null;
     ListView lv = null;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         tempSet = WordSearchGetPrefs.getStringSet("myArray", tempSet);
         return new ArrayList<String>(tempSet);
     }
+
     //ToDO: swap no and yes,pleaes
     public void removeElement(String selectedItem, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -225,17 +228,17 @@ public class MainActivity extends AppCompatActivity {
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    public Action getIndexApiAction() {
+  /*  public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("Main Page") // TODO: Define a title for the content shown.
                 // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                //.setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]")) //Commented out by Josh
                 .build();
         return new Action.Builder(Action.TYPE_VIEW)
                 .setObject(object)
                 .setActionStatus(Action.STATUS_TYPE_COMPLETED)
                 .build();
-    }
+    }*/
 
     @Override
     public void onStart() {
@@ -243,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+       //client.connect(); //Commented out by Josh
+       //AppIndex.AppIndexApi.start(client, getIndexApiAction()); //Commented out by Josh
     }
 
     @Override
@@ -253,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
+       //AppIndex.AppIndexApi.end(client, getIndexApiAction());  //Commented out by Josh
+       //client.disconnect(); //Commented out by Josh
     }
 }
