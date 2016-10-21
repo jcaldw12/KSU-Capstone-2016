@@ -75,19 +75,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Aaron
+        //Added by Adam//
+        masterItems = getArrayVal(getApplicationContext());
 
-        // example prices:
+
+        // Added by Aaron
+
+        // example prices (currently hard-coded):
         // Walmart:
-        // eggs 2.50
-        // milk 4.00
-        // cheese 2.25
-        // bread 3.00
+            // eggs 2.50
+            // milk 4.00
+            // cheese 2.25
+            // bread 3.00
         // Target:
-        // eggs 2.75
-        // milk 4.00
-        // cheese 2.50
-        // bread 2.75
+            // eggs 2.75
+            // milk 4.00
+            // cheese 2.50
+            // bread 2.75
 
         masterItems.add("Eggs");
         // get price for eggs from Walmart API
@@ -116,19 +120,15 @@ public class MainActivity extends AppCompatActivity {
         Double WalmartTotal = 0.00;
         Double TargetTotal = 0.00;
         Double bestTotal = 0.00;
-
         Integer largestList = null;
 
         if(WalmartPrices.size() > TargetPrices.size())
-        {
             largestList = WalmartPrices.size();
-        }else
-        {
+        else
             largestList = TargetPrices.size();
-        }
+
         // Walmart stuff
-        for (Integer i = 0; i < WalmartPrices.size(); ++i)
-        {
+        for (Integer i = 0; i < WalmartPrices.size(); ++i) {
             WalmartTotal += WalmartPrices.get(i);
             System.out.printf("Walmart " + masterItems.get(i) + " = $" + "%1.2f", WalmartPrices.get(i));
             System.out.println();
@@ -139,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println();
 
         // Target stuff
-        for (Integer i = 0; i < TargetPrices.size(); ++i)
-        {
+        for (Integer i = 0; i < TargetPrices.size(); ++i){
             TargetTotal += TargetPrices.get(i);
             System.out.printf("Target " + masterItems.get(i) + " = $" + "%1.2f", TargetPrices.get(i));
             System.out.println();
@@ -150,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println();
         System.out.println();
 
-        for (Integer i = 0; i < largestList; ++i)
-        {
+        for (Integer i = 0; i < largestList; ++i){
             if (WalmartPrices.get(i) <= TargetPrices.get(i)) {
                 bestPrices.add((float) WalmartPrices.get(i));
                 bestTotal += WalmartPrices.get(i);
@@ -162,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 bestList.add("Target");
             }
         }
-
-
         System.out.println();
         System.out.println("Best prices for a multiple store trip:");
 
@@ -174,17 +170,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
+        // End Add by Aaron
 
-
-
-
-
-
-
-
-
-        //Added by Adam//
-        masterItems = getArrayVal(getApplicationContext());
         Collections.sort(masterItems);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
         lv = (ListView) findViewById(R.id.listView);
