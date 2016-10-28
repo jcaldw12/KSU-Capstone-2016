@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 //import android.net.Uri;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.view.MotionEventCompat;
@@ -34,6 +35,11 @@ import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuItem;*/
 import android.view.MotionEvent;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 /*import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -47,9 +53,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 */
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<String> shoppingList = null;
+    //ArrayList<String> shoppingList = null; shopping list ---> masterItems
     ArrayAdapter<String> adapter = null;
     ListView lv = null;
+    ArrayList<String> masterItems = new ArrayList<String>();
+    ArrayList<Float> WalmartPrices = new ArrayList<Float>();
+    ArrayList<Float> TargetPrices = new ArrayList<Float>();
+    ArrayList<Float> bestPrices = new ArrayList<Float>();
+    ArrayList<String> bestList = new ArrayList<String>();
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -62,18 +74,115 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//I
+
         //Added by Adam//
-        shoppingList = getArrayVal(getApplicationContext());
-        Collections.sort(shoppingList);
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, shoppingList);
+        masterItems = getArrayVal(getApplicationContext());
+
+
+        // Added by Aaron
+
+        // example prices (currently hard-coded):
+        // Walmart:
+            // eggs 2.50
+            // milk 4.00
+            // cheese 2.25
+            // bread 3.00
+        // Target:
+            // eggs 2.75
+            // milk 4.00
+            // cheese 2.50
+            // bread 2.75
+
+        // can comment out all the adds
+        // but DO NOT REMOVE THEM ~~~Aaron
+        masterItems.add("Eggs");
+        // get price for eggs from Walmart API
+        WalmartPrices.add((float) 2.50);
+        // get price for eggs from Target API
+        TargetPrices.add((float) 2.75);
+
+        masterItems.add("Milk");
+        // get price for milk from Walmart API
+        WalmartPrices.add((float) 4.00);
+        // get price for milk from Target API
+        TargetPrices.add((float) 4.00);
+
+        masterItems.add("Cheese");
+        // get price for cheese from Walmart API
+        WalmartPrices.add((float) 2.25);
+        // get price for cheese from Target API
+        TargetPrices.add((float) 2.50);
+
+        masterItems.add("Bread");
+        // get price for bread from Walmart API
+        WalmartPrices.add((float) 3.00);
+        // get price for bread from Target API
+        TargetPrices.add((float) 2.75);
+
+        Double WalmartTotal = 0.00;
+        Double TargetTotal = 0.00;
+        Double bestTotal = 0.00;
+        Integer largestList = null;
+
+        if(WalmartPrices.size() > TargetPrices.size())
+            largestList = WalmartPrices.size();
+        else
+            largestList = TargetPrices.size();
+
+        // Walmart stuff
+        for (Integer i = 0; i < WalmartPrices.size(); ++i) {
+            WalmartTotal += WalmartPrices.get(i);
+            System.out.printf("Walmart " + masterItems.get(i) + " = $" + "%1.2f", WalmartPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("One trip to Walmart Total: $" + "%1.2f", WalmartTotal);
+        System.out.println();
+        System.out.println();
+
+        // Target stuff
+        for (Integer i = 0; i < TargetPrices.size(); ++i){
+            TargetTotal += TargetPrices.get(i);
+            System.out.printf("Target " + masterItems.get(i) + " = $" + "%1.2f", TargetPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("One trip to Target Total: $" + "%1.2f", TargetTotal);
+        System.out.println();
+        System.out.println();
+
+        for (Integer i = 0; i < largestList; ++i){
+            if (WalmartPrices.get(i) <= TargetPrices.get(i)) {
+                bestPrices.add((float) WalmartPrices.get(i));
+                bestTotal += WalmartPrices.get(i);
+                bestList.add("Walmart");
+            } else {
+                bestPrices.add((float) TargetPrices.get(i));
+                bestTotal += TargetPrices.get(i);
+                bestList.add("Target");
+            }
+        }
+        System.out.println();
+        System.out.println("Best prices for a multiple store trip:");
+
+        for(Integer i = 0; i < bestPrices.size(); ++i)
+        {
+            System.out.printf(bestList.get(i) + " " + masterItems.get(i) + ": $" + "%1.2f", bestPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
+        // End Add by Aaron
+
+        Collections.sort(masterItems);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
         lv = (ListView) findViewById(R.id.listView);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, final int position, long id) {
                 String selectedItem = ((TextView) view).getText().toString();
-                if (selectedItem.trim().equals(shoppingList.get(position).trim())) {
+                if (selectedItem.trim().equals(masterItems.get(position).trim())) {
                     removeElement(selectedItem, position);
                 } else {
                     Toast.makeText(getApplicationContext(), "Error Removing Element", Toast.LENGTH_LONG).show();
@@ -82,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
         });
         //End of addition//
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -114,9 +226,9 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    shoppingList.add(preferredCase(input.getText().toString()));
-                    Collections.sort(shoppingList);
-                    storeArrayVal(shoppingList, getApplicationContext());
+                    masterItems.add(preferredCase(input.getText().toString()));
+                    Collections.sort(masterItems);
+                    storeArrayVal(masterItems, getApplicationContext());
                     lv.setAdapter(adapter);
                 }
             });
@@ -135,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    shoppingList.clear();
+                    masterItems.clear();
                     lv.setAdapter(adapter);
                 }
             });
@@ -181,9 +293,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                shoppingList.remove(position);
-                Collections.sort(shoppingList);
-                storeArrayVal(shoppingList, getApplicationContext());
+                masterItems.remove(position);
+                Collections.sort(masterItems);
+                storeArrayVal(masterItems, getApplicationContext());
                 lv.setAdapter(adapter);
             }
         });
@@ -239,24 +351,49 @@ public class MainActivity extends AppCompatActivity {
                 .setActionStatus(Action.STATUS_TYPE_COMPLETED)
                 .build();
     }*/
-
     @Override
     public void onStart() {
-        super.onStart();
+        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        //client.connect();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-       //client.connect(); //Commented out by Josh
-       //AppIndex.AppIndexApi.start(client, getIndexApiAction()); //Commented out by Josh
+        //client.connect(); //Commented out by Josh
+        //AppIndex.AppIndexApi.start(client, getIndexApiAction()); //Commented out by Josh
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        //AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
-        super.onStop();
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        //AppIndex.AppIndexApi.end(client, getIndexApiAction());
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-       //AppIndex.AppIndexApi.end(client, getIndexApiAction());  //Commented out by Josh
-       //client.disconnect(); //Commented out by Josh
+        //AppIndex.AppIndexApi.end(client, getIndexApiAction());  //Commented out by Josh
+        //client.disconnect(); //Commented out by Josh
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        //client.disconnect();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-HTTP-HOST-HERE]/main"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
     }
 }
