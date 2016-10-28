@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         //getMenuInflater().inflate(R.menu.menu_main, menu);
         //^changing this to put the value into a variable
 
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
